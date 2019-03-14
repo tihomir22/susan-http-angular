@@ -1,0 +1,11 @@
+<div class="container">
+  <div class="card-columns">
+    <div class="card" *ngFor="let usuario of listaUsuarios">
+      <img class="card-img-top" src="holder.js/100x180/" alt="">
+      <div class="card-body">
+        <h4 class="card-title"><strong>Nombre: </strong>{{usuario.name}}</h4>
+        <p class="card-text"><strong>Username: </strong>{{usuario.username}} <strong>Email: </strong>{{usuario.email}}</p>
+      </div>
+    </div>
+
+  </div>
