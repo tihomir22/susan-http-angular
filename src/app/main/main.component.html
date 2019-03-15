@@ -1,11 +1,29 @@
 <div class="container">
   <div class="card-columns">
-    <div class="card" *ngFor="let usuario of listaUsuarios">
-      <img class="card-img-top" src="holder.js/100x180/" alt="">
+    <div class="card" *ngFor="let usuario of listaUsuarios;index as indece">
+      <img class="card-img-top" src="https://picsum.photos/400/400?image={{indece}}" alt="">
       <div class="card-body">
         <h4 class="card-title"><strong>Nombre: </strong>{{usuario.name}}</h4>
-        <p class="card-text"><strong>Username: </strong>{{usuario.username}} <strong>Email: </strong>{{usuario.email}}</p>
+        <p class="card-text"><strong>Username: </strong>{{usuario.username}} <strong>Email: </strong>{{usuario.email}}
+        </p>
+        <button type="button" class="btn btn-danger" (click)="eliminarCard(usuario.id)"><i
+            class="fa fa-times-circle"></i>Eliminar</button>
+        <button type="button" class="btn btn-dark" (click)="modificarCard(usuario,true)"><i
+            class="fa fa-save"></i>Modificar</button>
+
       </div>
     </div>
-
   </div>
+
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <strong *ngIf="listaUsuarios != undefined">{{listaUsuarios.length}}</strong> Usuarios 
+  </div>
+
+  <div class="row" [ngClass]="claseAnimada">
+    <app-input class="col-12" (actualizar)="getTodosUsuarios()" [datosFormulario]="datosFormulario"
+      [tipoPeticion]="tipoPeticion"></app-input>
+  </div>
+</div>

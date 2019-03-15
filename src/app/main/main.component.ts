@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {UsuarioInterface} from './modelo/UsuarioInterface';
-import {UsuarioClass} from './modelo/UsuarioClass';
-import { HttpClient } from '@angular/common/http';
-import {plainToClass} from "class-transformer";
+import { UsuarioClass } from './modelo/UsuarioClass';
+import { ServicioRestService } from '../servicio-rest.service';
 
 
 @Component({
@@ -11,22 +9,62 @@ import {plainToClass} from "class-transformer";
   styleUrls: ['./main.component.scss']
 })
 export class MainComponent implements OnInit {
-  public listaUsuarios:Array<UsuarioClass>;
-  constructor(private http: HttpClient) { }
+  public listaUsuarios: Array<UsuarioClass>;
+  public claseAnimada: string = '';
+  public datosFormulario: UsuarioClass;
+  //se cambia en funciona a la tipo de peticion
+  public tipoPeticion:string='insertar';
+  
+
+ 
+
+  constructor(private servicio: ServicioRestService) { }
 
   ngOnInit() {
     this.getTodosUsuarios();
   }
-  getTodosUsuarios():void{
-    this.http.get("http://localhost:3000/users").subscribe((data:UsuarioClass[])=>{
-      const realUsers = plainToClass(UsuarioClass, data);
-      this.listaUsuarios=realUsers
+
+  private getTodosUsuarios(): void {
+    this.servicio.getTodosUsuarios().subscribe((data: UsuarioClass[]) => {
+      this.listaUsuarios=data;
       console.log(this.listaUsuarios);
-    },(error)=>{
+    }, (error) => {
       console.log(error)
-    },()=>{
-      console.log("terminamos")
+    }, () => {
+      console.log("terminamoos")
+      this.tipoPeticion='insertar';
     })
   }
+  public eliminarCard(id: number): void {
+    this.servicio.eliminarUsuario(id).subscribe((data) => {
+      console.log("eliminado con exito ", data)
+    }, (error) => {
+      console.log(error)
+    }, () => {
+      this.getTodosUsuarios();
+    })
+  }
+  public modificarCard(usuario:UsuarioClass): void {
+
+    this.aplicarEstiloAnimado();
+    setTimeout(()=>{ this.datosFormulario=usuario;
+      this.tipoPeticion='modificar';
+    }, 500);
+    
+    console.log(this.tipoPeticion)
+
+  }
+
+
+
+  public aplicarEstiloAnimado(): void {
+    if (this.claseAnimada == '') {
+      this.claseAnimada = 'blink_me';
+      setTimeout(()=>{ this.claseAnimada='' }, 1000);
+    } 
+    console.log(this.claseAnimada)
+  }
+
+
 
 }
